@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 340px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f8fafc;
+    }
+    .header {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+      padding: 16px;
+      text-align: center;
+    }
+    .header h1 { font-size: 16px; font-weight: 600; }
+    .header p { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+    .content { padding: 12px; }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .last-check { padding: 10px; border-radius: 6px; }
+    .last-check.good { background: #dcfce7; border-left: 3px solid #22c55e; }
+    .last-check.approval { background: #fef3c7; border-left: 3px solid #f59e0b; }
+    .last-check.bad { background: #fee2e2; border-left: 3px solid #ef4444; }
+    .last-check.unknown { background: #f1f5f9; border-left: 3px solid #94a3b8; }
+    .asin { font-weight: 700; font-size: 15px; color: #1e293b; }
+    .status { 
+      display: inline-block; 
+      padding: 2px 8px; 
+      border-radius: 4px; 
+      font-size: 11px; 
+      font-weight: 600; 
+      color: white;
+      margin-top: 4px;
+    }
+    .status.good { background: #22c55e; }
+    .status.approval { background: #f59e0b; }
+    .status.bad { background: #ef4444; }
+    .status.unknown { background: #94a3b8; }
+    .time { font-size: 11px; color: #64748b; margin-top: 4px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .stat {
+      text-align: center;
+      padding: 8px 4px;
+      background: #f1f5f9;
+      border-radius: 6px;
+    }
+    .stat-num { font-size: 20px; font-weight: 700; }
+    .stat-num.good { color: #22c55e; }
+    .stat-num.approval { color: #f59e0b; }
+    .stat-num.bad { color: #ef4444; }
+    .stat-label { font-size: 9px; color: #64748b; text-transform: uppercase; }
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 6px;
+    }
+    .btn-primary { background: #3b82f6; color: white; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-secondary { background: #e2e8f0; color: #475569; }
+    .btn-secondary:hover { background: #cbd5e1; }
+    .no-data { text-align: center; padding: 20px; color: #94a3b8; }
+    .no-data-icon { font-size: 32px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📚 BAA Seller Central</h1>
+    <p>Eligibility Checker</p>
+  </div>
+  
+  <div class="content">
+    <div id="lastCheckCard" class="card" style="display:none;">
+      <div class="card-title">Last Check</div>
+      <div id="lastCheck" class="last-check">
+        <div class="asin" id="asin">-</div>
+        <span class="status" id="status">-</span>
+        <div class="time" id="time">-</div>
+      </div>
+    </div>
+    
+    <div id="noData" class="card">
+      <div class="no-data">
+        <div class="no-data-icon">🔍</div>
+        <div>No checks yet</div>
+        <div style="font-size:12px; margin-top:4px;">Visit Seller Central easylist page</div>
+      </div>
+    </div>
+    
+    <div id="statsCard" class="card" style="display:none;">
+      <div class="card-title">Statistics</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num good" id="sGood">0</div>
+          <div class="stat-label">Good</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num approval" id="sApproval">0</div>
+          <div class="stat-label">Approval</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num bad" id="sRestricted">0</div>
+          <div class="stat-label">Restricted</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="sTotal">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <button class="btn btn-primary" id="checkBtn">🔍 Check Current Page</button>
+      <button class="btn btn-secondary" id="exportBtn">📥 Export CSV</button>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

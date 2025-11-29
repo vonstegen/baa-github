@@ -1,0 +1,40 @@
+# Publisher Watchlist
+# Publishers known to have issues with third-party sellers
+# Updated: November 2025
+
+# IP/Copyright Issues
+# These publishers actively file IP complaints against sellers
+ip_issues:
+  - "test prep company"
+  - "educational testing service"
+  - "college board"
+  - "kaplan"
+  - "princeton review"
+  - "barron's"
+
+# Workbook/Consumable Publishers
+# Products often have writing/highlighting issues
+consumables:
+  - "kumon publishing"
+  - "school zone"
+  - "brain quest"
+  - "summer bridge activities"
+
+# High Return Rate Publishers
+# These tend to have quality issues or mismatched editions
+high_returns:
+  - "dover publications"  # Many similar editions
+  - "createspace"         # Self-published, quality varies
+  - "independently published"
+
+# Restricted Brands
+# Amazon restricts third-party sales
+restricted:
+  - "disney"
+  - "marvel"
+  - "star wars"
+
+# Notes:
+# - This list should be updated based on your experience
+# - Some publishers may have specific titles that are OK
+# - Always check individual ASIN eligibility via extension

@@ -1,0 +1,120 @@
+# F-Agent Decision Thresholds Configuration
+# Updated: November 2025
+
+# Eligibility settings
+eligibility:
+  # Which statuses are allowed for buying
+  allowed_statuses:
+    - GOOD
+  
+  # Allow products that need approval?
+  allow_need_approval: false
+  
+  # If allowing need_approval, minimum success rate
+  approval_success_threshold: 0.7
+
+# BSR (Best Seller Rank) thresholds
+bsr:
+  # Hard maximum - skip anything above this
+  max_rank: 2000000
+  
+  # Preferred maximum - higher confidence below this
+  preferred_max: 500000
+  
+  # Premium threshold - very fast sellers
+  premium_max: 100000
+
+# Sales velocity requirements
+sales:
+  # Minimum estimated monthly sales
+  min_monthly_sales: 1
+  
+  # Preferred monthly sales for higher confidence
+  preferred_monthly_sales: 3
+  
+  # How to estimate sales from BSR drops
+  # Uses Keepa BSR drop counting
+  estimation_method: "bsr_drops"
+
+# ROI (Return on Investment) requirements
+roi:
+  # Minimum ROI to consider buying
+  minimum_percent: 30
+  
+  # Preferred ROI for confident buys
+  preferred_percent: 50
+  
+  # Premium ROI - definitely buy
+  premium_percent: 100
+
+# Competition thresholds
+competition:
+  # Maximum FBA sellers before skipping
+  max_fba_sellers: 10
+  
+  # Preferred maximum FBA sellers
+  preferred_fba_sellers: 5
+  
+  # Include FBM sellers in count?
+  include_fbm: false
+
+# Price requirements
+price:
+  # Minimum selling price to consider
+  min_selling_price: 10.00
+  
+  # Allow products with declining price trends?
+  allow_declining_trend: false
+  
+  # Price stability window (days)
+  stability_window_days: 90
+
+# FBA Fee Structure (2025)
+fees:
+  # Referral fee percentage
+  referral_fee_percent: 0.15
+  
+  # Minimum referral fee
+  minimum_referral_fee: 0.30
+  
+  # FBA fulfillment fees by weight tier
+  fba_fulfillment:
+    small_standard_oz: 16      # Up to 16oz
+    small_standard_fee: 3.22
+    large_standard_oz: 32      # Up to 2lb
+    large_standard_fee: 4.95
+    large_standard_2_oz: 48    # Up to 3lb
+    large_standard_2_fee: 5.95
+  
+  # Inbound placement fee (per unit average)
+  inbound_placement_fee: 0.27
+  
+  # Monthly storage (per cubic foot)
+  monthly_storage:
+    jan_sep: 0.87
+    oct_dec: 2.40
+
+# Watch list settings
+watch:
+  # How long to watch before re-evaluating
+  watch_duration_days: 7
+  
+  # Conditions that trigger watch instead of skip
+  watch_conditions:
+    - low_sales
+    - price_declining
+    - high_competition
+
+# Batch processing settings
+batch:
+  # Maximum ASINs to process at once
+  max_batch_size: 100
+  
+  # Delay between API calls (seconds)
+  api_delay: 0.5
+  
+  # Cache eligibility results for (hours)
+  eligibility_cache_hours: 24
+  
+  # Cache Keepa data for (hours)
+  keepa_cache_hours: 6

@@ -1,0 +1,6 @@
+# This directory stores:
+# - eligibility_cache.db (SQLite cache)
+# - analysis_results.json (exported results)
+# - extension_export.json (from browser extension)
+
+# These files are gitignored but the directory structure is preserved.

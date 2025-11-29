@@ -1,0 +1,92 @@
+# S-Agent Configuration
+# Shipping & Status Agent Settings
+
+database:
+  # Database type: sqlite or postgresql
+  type: sqlite
+  
+  # SQLite path (relative to s-agent directory)
+  path: data/inventory.db
+  
+  # PostgreSQL settings (if type is postgresql)
+  # host: localhost
+  # port: 5432
+  # database: baa_inventory
+  # user: ${DB_USER}
+  # password: ${DB_PASSWORD}
+
+tracking:
+  # Enable automatic tracking updates
+  enabled: true
+  
+  # Check interval in minutes
+  check_interval: 60
+  
+  # Carrier API keys (set via environment variables)
+  carriers:
+    ups:
+      api_key: ${UPS_API_KEY}
+      enabled: false
+    usps:
+      api_key: ${USPS_API_KEY}
+      enabled: false
+    fedex:
+      api_key: ${FEDEX_API_KEY}
+      enabled: false
+
+amazon:
+  # SP-API for inventory status updates
+  enabled: false
+  
+  # Check interval in minutes
+  inventory_check_interval: 30
+  
+  # SP-API credentials
+  refresh_token: ${SP_API_REFRESH_TOKEN}
+  client_id: ${SP_API_CLIENT_ID}
+  client_secret: ${SP_API_CLIENT_SECRET}
+
+alerts:
+  # Enable alert system
+  enabled: true
+  
+  # Notification method: email, slack, webhook, console
+  method: console
+  
+  # Email settings (if method is email)
+  email:
+    smtp_host: smtp.gmail.com
+    smtp_port: 587
+    username: ${ALERT_EMAIL}
+    password: ${ALERT_EMAIL_PASSWORD}
+    to_address: ${ALERT_TO_EMAIL}
+  
+  # Slack settings (if method is slack)
+  slack:
+    webhook_url: ${SLACK_WEBHOOK_URL}
+  
+  # Alert thresholds
+  thresholds:
+    # Days without tracking update before alerting
+    delivery_delay_days: 7
+    
+    # Days FBA available without sale before alerting
+    aging_inventory_days: 60
+    
+    # Days in receiving status before alerting
+    receiving_delay_days: 5
+
+dashboard:
+  # Auto-refresh interval in seconds
+  refresh_interval: 300
+  
+  # Default time period for reports
+  default_report_days: 30
+
+pipeline:
+  # Expected days for each stage (for estimations)
+  expected_days:
+    ordered_to_received: 7
+    received_to_processed: 2
+    processed_to_fba_available: 10
+    fba_available_to_sold: 30  # Average

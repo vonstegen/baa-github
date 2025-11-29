@@ -1,0 +1,43 @@
+{
+  "manifest_version": 2,
+  "name": "BAA Seller Central Checker",
+  "version": "2.0.0",
+  "description": "Check book selling eligibility on Amazon Seller Central",
+  
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  },
+  
+  "permissions": [
+    "storage",
+    "activeTab",
+    "https://sellercentral.amazon.com/*"
+  ],
+  
+  "background": {
+    "scripts": ["background.js"]
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["https://sellercentral.amazon.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  
+  "browser_action": {
+    "default_icon": "icons/icon-48.png",
+    "default_title": "BAA Seller Central Checker",
+    "default_popup": "popup.html"
+  },
+  
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "baa-sc@andreas.local",
+      "strict_min_version": "109.0"
+    }
+  }
+}

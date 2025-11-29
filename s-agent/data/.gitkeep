@@ -1,0 +1,7 @@
+# S-Agent Data Directory
+
+This directory stores:
+- inventory.db - SQLite database with all book records
+- exports/ - Exported reports and data
+
+Files in this directory are gitignored.
