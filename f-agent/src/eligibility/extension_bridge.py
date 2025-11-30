@@ -54,7 +54,15 @@ class EligibilityResult:
     
     def is_stale(self, max_age_hours: int = 24) -> bool:
         """Is this result too old?"""
-        age = datetime.now() - self.checked_at
+        # Handle timezone-aware and naive datetimes
+        now = datetime.now()
+        checked = self.checked_at
+        
+        # If checked_at is timezone-aware, make it naive for comparison
+        if checked.tzinfo is not None:
+            checked = checked.replace(tzinfo=None)
+        
+        age = now - checked
         return age > timedelta(hours=max_age_hours)
 
 
@@ -159,12 +167,15 @@ class ExtensionBridge:
         self.export_path = Path(export_path)
         self.cache = EligibilityCache(cache_db)
         
-    def import_from_extension(self) -> List[EligibilityResult]:
+    def import_from_extension(self, filepath: str = None) -> List[EligibilityResult]:
         """
         Import results from extension's exported JSON file.
         
-        Extension should export data in format:
+        Extension exports data in format:
         {
+            "exportedAt": "2025-11-29T20:00:00Z",
+            "version": "6.2",
+            "source": "baa-seller-central-extension",
             "results": [
                 {
                     "asin": "1234567890",
@@ -177,22 +188,44 @@ class ExtensionBridge:
                 ...
             ]
         }
+        
+        Args:
+            filepath: Path to JSON file. If None, uses default export_path.
+        
+        Returns:
+            List of EligibilityResult objects
         """
-        if not self.export_path.exists():
+        import_path = Path(filepath) if filepath else self.export_path
+        
+        if not import_path.exists():
+            print(f"Export file not found: {import_path}")
+            print("Tip: Use the extension's 'Export JSON (F-Agent)' button")
             return []
         
-        with open(self.export_path) as f:
+        with open(import_path) as f:
             data = json.load(f)
+        
+        print(f"Importing from: {import_path}")
+        print(f"Export version: {data.get('version', 'unknown')}")
+        print(f"Exported at: {data.get('exportedAt', 'unknown')}")
         
         results = []
         for item in data.get('results', []):
+            # Parse timestamp - handle both Z and +00:00 formats
+            checked_at_str = item.get('checkedAt', '')
+            try:
+                if checked_at_str.endswith('Z'):
+                    checked_at = datetime.fromisoformat(checked_at_str.replace('Z', '+00:00'))
+                else:
+                    checked_at = datetime.fromisoformat(checked_at_str)
+            except:
+                checked_at = datetime.now()
+            
             result = EligibilityResult(
                 asin=item['asin'],
                 status=EligibilityStatus(item['status']),
                 condition=item.get('condition', 'Used'),
-                checked_at=datetime.fromisoformat(
-                    item['checkedAt'].replace('Z', '+00:00')
-                ),
+                checked_at=checked_at,
                 bsr=item.get('bsr'),
                 title=item.get('title'),
                 message=item.get('message')
@@ -200,6 +233,7 @@ class ExtensionBridge:
             results.append(result)
             self.cache.set(result)  # Cache imported results
         
+        print(f"Imported {len(results)} eligibility results")
         return results
     
     def check_eligibility(

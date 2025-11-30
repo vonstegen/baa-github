@@ -2,6 +2,37 @@
 
 All notable changes to the BAA Seller Central Extension are documented in this file.
 
+## [6.2] - 2025-11-29
+
+### Added
+- **JSON Export for F-Agent** - New "Export JSON (F-Agent)" button in popup
+- Export format specifically designed for F-Agent's ExtensionBridge
+- Export info display showing count and save location
+- Green styling for JSON export button
+
+### Changed
+- Background script now handles EXPORT_JSON message type
+- JSON export includes version, timestamp, and source metadata
+
+### Export Format
+```json
+{
+  "exportedAt": "2025-11-29T20:00:00Z",
+  "version": "6.2",
+  "source": "baa-seller-central-extension",
+  "results": [
+    {
+      "asin": "1234567890",
+      "status": "GOOD",
+      "condition": "Used",
+      "bsr": 150000,
+      "title": "Book Title",
+      "checkedAt": "2025-11-29T19:00:00Z"
+    }
+  ]
+}
+```
+
 ## [6.1] - 2025-11-29
 
 ### Added

@@ -82,6 +82,8 @@
     .btn-primary:hover { background: #2563eb; }
     .btn-secondary { background: #e2e8f0; color: #475569; }
     .btn-secondary:hover { background: #cbd5e1; }
+    .btn-json { background: #10b981; color: white; }
+    .btn-json:hover { background: #059669; }
     .no-data { text-align: center; padding: 20px; color: #94a3b8; }
     .no-data-icon { font-size: 32px; margin-bottom: 8px; }
   </style>
@@ -135,6 +137,12 @@
     <div class="card">
       <button class="btn btn-primary" id="checkBtn">🔍 Check Current Page</button>
       <button class="btn btn-secondary" id="exportBtn">📥 Export CSV</button>
+      <button class="btn btn-json" id="exportJsonBtn">📤 Export JSON (F-Agent)</button>
+    </div>
+    
+    <div id="exportInfo" class="card" style="display:none;">
+      <div class="card-title">Export Info</div>
+      <div id="exportMessage" style="font-size: 12px; color: #64748b;"></div>
     </div>
   </div>
   

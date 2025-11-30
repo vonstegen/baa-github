@@ -19,6 +19,11 @@ browser.runtime.onMessage.addListener((msg, sender, respond) => {
     return true;
   }
   
+  if (msg.type === 'EXPORT_JSON') {
+    exportJSON().then(json => respond({ json }));
+    return true;
+  }
+  
   if (msg.type === 'CLEAR_DATA') {
     browser.storage.local.clear().then(() => respond({ success: true }));
     return true;
@@ -72,6 +77,51 @@ async function exportCSV() {
   }
   
   return csv;
+}
+
+/**
+ * Export JSON for F-Agent integration
+ * 
+ * Format expected by F-Agent's ExtensionBridge:
+ * {
+ *   "exportedAt": "ISO timestamp",
+ *   "version": "6.2",
+ *   "results": [
+ *     {
+ *       "asin": "1234567890",
+ *       "status": "GOOD | NEED_APPROVAL | RESTRICTED",
+ *       "condition": "Used",
+ *       "bsr": 150000,
+ *       "title": "Book Title",
+ *       "message": "Status message",
+ *       "checkedAt": "ISO timestamp"
+ *     }
+ *   ]
+ * }
+ */
+async function exportJSON() {
+  const result = await browser.storage.local.get('checks');
+  const checks = Object.values(result.checks || {});
+  
+  if (checks.length === 0) return '';
+  
+  const exportData = {
+    exportedAt: new Date().toISOString(),
+    version: "6.2",
+    source: "baa-seller-central-extension",
+    results: checks.map(c => ({
+      asin: c.asin,
+      status: c.status,
+      condition: c.condition || 'Used',
+      bsr: c.bsr || null,
+      title: c.title || '',
+      message: c.message || '',
+      url: c.url || '',
+      checkedAt: c.checkedAt
+    }))
+  };
+  
+  return JSON.stringify(exportData, null, 2);
 }
 
 console.log('[BAA-SC] Background script loaded');

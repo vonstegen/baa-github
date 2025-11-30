@@ -17,6 +17,13 @@ from typing import List, Dict, Optional
 from datetime import datetime
 from dataclasses import dataclass
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv not installed, use system env vars
+
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -154,6 +161,10 @@ class FAgent:
             source_name=source_name,
             title=keepa_data.title if keepa_data else None
         )
+        
+        # Debug: show what data we have
+        if os.getenv('BAA_DEBUG'):
+            print(f"  [DEBUG] eligibility={eligibility_status}, bsr={product.bsr}, sales={product.monthly_sales_estimate}")
         
         # 4. Make decision
         decision_result = self.decision_engine.analyze(product)

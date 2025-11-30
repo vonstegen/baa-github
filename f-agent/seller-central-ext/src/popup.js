@@ -104,6 +104,43 @@ document.getElementById('exportBtn').addEventListener('click', async () => {
   setTimeout(() => { btn.textContent = '📥 Export CSV'; btn.disabled = false; }, 2000);
 });
 
+// JSON Export for F-Agent integration
+document.getElementById('exportJsonBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('exportJsonBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Exporting...';
+  
+  try {
+    const response = await browser.runtime.sendMessage({ type: 'EXPORT_JSON' });
+    if (response?.json) {
+      const blob = new Blob([response.json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `baa-eligibility-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      // Show export info
+      const count = JSON.parse(response.json).results.length;
+      document.getElementById('exportInfo').style.display = 'block';
+      document.getElementById('exportMessage').innerHTML = `
+        ✅ Exported <strong>${count}</strong> results<br>
+        <span style="font-size: 11px;">Save to: <code>f-agent/data/extension_export.json</code></span>
+      `;
+      
+      btn.textContent = '✓ Done';
+    } else {
+      btn.textContent = 'No Data';
+    }
+  } catch (e) {
+    console.error(e);
+    btn.textContent = '✗ Error';
+  }
+  
+  setTimeout(() => { btn.textContent = '📤 Export JSON (F-Agent)'; btn.disabled = false; }, 3000);
+});
+
 function timeAgo(date) {
   const s = Math.floor((new Date() - date) / 1000);
   if (s < 60) return 'just now';

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "BAA Seller Central Checker",
-  "version": "2.0.0",
-  "description": "Check book selling eligibility on Amazon Seller Central",
+  "version": "6.2.0",
+  "description": "Check book selling eligibility on Amazon Seller Central - Part of BAA F-Agent",
   
   "icons": {
     "48": "icons/icon-48.png",
